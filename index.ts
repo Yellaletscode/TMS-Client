@@ -1,5 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { isStudent, parseStudent, Student } from "./models/student.model.js";
+import { calculateGrade, type AssessmentItem } from "./models/assessment.model.js";
 const student: Student = {
   id: "STU-001",
   name: "Hana Tadesse",
@@ -22,4 +23,23 @@ processStudent({ id: "STU-001", name: "Hana", gpa: 3.7 });
 processStudent(42);
 console.log(parseStudent({ id: "STU-001", name: "Hana" }));
 // Prints a valid Student object
-parseStudent({ id: 42, name: "Test" });
+// parseStudent({ id: 42, name: "Test" });
+
+const quiz: AssessmentItem = {
+  id: "QUIZ-001",
+  kind: "quiz",
+  title: "SQL Basics",
+  correctAnswers: 8,
+  totalQuestions: 10,
+};
+const lab: AssessmentItem = {
+  id: "LAB-001",
+  kind: "lab",
+  title: "REST API Project",
+  functionalityScore: 85,
+  codeQualityScore: 90,
+};
+console.log(`Quiz grade: ${calculateGrade(quiz)}%`); // 80
+console.log(`Lab grade: ${calculateGrade(lab)}%`); // 87
+// Verify readonly try this line and check the compiler error:
+// quiz.id = "QUIZ-999";
