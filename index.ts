@@ -8,7 +8,8 @@ import {
   describeEnrollment,
   type EnrollmentStatus,
 } from "./models/enrollment.model.js";
-import { describeCourse, type CourseStatus } from "./models/course.model.js";
+import { describeCourse, type Course, type CourseStatus } from "./models/course.model.js";
+import { renderResponse, type ApiResponse } from "./models/api-response.model.js";
 const student: Student = {
   id: "STU-001",
   name: "Hana Tadesse",
@@ -60,10 +61,41 @@ const pending: EnrollmentStatus = {
 };
 console.log(describeEnrollment(pending));
 
-
 const webDev: CourseStatus = {
   status: "ACTIVE",
   enrolledCount: 28,
   startDate: Temporal.PlainDate.from("2026-09-01"),
 };
 console.log(describeCourse(webDev));
+
+const studentRes: ApiResponse<Student> = {
+  status: "success",
+  data: {
+    id: "STU-001",
+    name: "Dawit Bekele",
+    enrollmentDate: Temporal.Now.instant(),
+    gpa: 3.4,
+  },
+  fetchedAt: Temporal.Now.instant(),
+};
+console.log(
+  renderResponse(studentRes, (s) => `${s.name} GPA: ${s.gpa ?? "N/A"}`),
+);
+// Nowtest with a different data type
+const courseListRes: ApiResponse<Course[]> = {
+  status: "success",
+  data: [
+    {
+      id: "CRS-101",
+      title: "Web Development Fundamentals",
+      capacity: 30,
+      startDate: Temporal.PlainDate.from("2026-09-01"),
+    },
+  ],
+  fetchedAt: Temporal.Now.instant(),
+};
+console.log(
+  renderResponse(courseListRes, (courses) =>
+    courses.map((c) => c.title).join(", "),
+  ),
+);
